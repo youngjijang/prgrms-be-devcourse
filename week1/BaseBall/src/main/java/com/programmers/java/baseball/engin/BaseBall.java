@@ -14,10 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @AllArgsConstructor
 public class BaseBall implements Runnable {
-    private  final int COUNT_OF_NUMBER = 3;
+    private final int COUNT_OF_NUMBER = 3;
 
     private NumberGenerator generator;
-    private Input input;
+    private Input input; // 인터페이스를 변수로 선언한면 생성은 안해줘도 되는거?
     private Output output;
 
     @Override
