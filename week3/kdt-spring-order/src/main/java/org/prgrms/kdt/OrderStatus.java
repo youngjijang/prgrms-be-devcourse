@@ -1,4 +1,4 @@
-package org.prgrms.kdt.kdtspringorder;
+package org.prgrms.kdt;
 
 public enum OrderStatus {
     ACCEPTED,

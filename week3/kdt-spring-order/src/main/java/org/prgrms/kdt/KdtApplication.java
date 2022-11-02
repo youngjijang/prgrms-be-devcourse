@@ -1,13 +1,13 @@
-package org.prgrms.kdt.kdtspringorder;
+package org.prgrms.kdt;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class KdtSpringOrderApplication {
+public class KdtApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(KdtSpringOrderApplication.class, args);
+        SpringApplication.run(KdtApplication.class, args);
     }
 
 }
