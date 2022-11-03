@@ -24,4 +24,6 @@ database
   : IoC 구현 , IoC 컨테이너 생성
 
 - kdt-spring-order-ver3
-  : 의존성 주입 , Stereo type 추가
+  : Stereo type 추가, 컴포넌트 스캔 실습
+  : 패키지 분류
+  : lifecycle callback 추가

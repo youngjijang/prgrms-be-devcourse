@@ -1,13 +1,15 @@
-package org.prgrms.kdt;
+package org.prgrms.kdt.voucher;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
+@Service
 public class VoucherService {
-    private final VoucherRepository voucherRepository;
 
-    public VoucherService(VoucherRepository voucherRepository) {
-        this.voucherRepository = voucherRepository;
-    }
+    @Autowired
+    private VoucherRepository voucherRepository;
 
     public Voucher getVoucher(UUID voucherId) {
         return  voucherRepository.findById(voucherId)
