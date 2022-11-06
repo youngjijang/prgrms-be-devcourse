@@ -6,6 +6,9 @@ import org.prgrms.kdt.order.OrderProperties;
 import org.prgrms.kdt.order.OrderService;
 import org.prgrms.kdt.voucher.FixedAmountVoucher;
 import org.prgrms.kdt.voucher.VoucherRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.ansi.AnsiOutput;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.util.Assert;
 
@@ -20,7 +23,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public class OrderTester {
+
+    // static으로 생성해야 단 하나의 logger만 만들어지게 한다.
+    // org.prgrms.kdt.OrderTester
+    private static final Logger logger = LoggerFactory.getLogger(OrderTester.class); //메소드가 아니라 class 단위에서 생성
     public static void main(String[] args) throws Exception{
+        AnsiOutput.setEnabled(AnsiOutput.Enabled.ALWAYS); // conversion
 
     //    var applicationContext = new AnnotationConfigApplicationContext(AppConfiguration.class);
 
@@ -30,28 +38,14 @@ public class OrderTester {
         environment.setActiveProfiles("local");
         applicationContext.refresh(); //profile이 재대로 적용될 수 있게 refresh
 
-//        var environment = applicationContext.getEnvironment();
-//        var version = environment.getProperty("kdt.version");
-//        environment.getProperty("kdt.minimum-order-amount", Integer.class);
-//        environment.getProperty("kdt.supportVendors", List.class);
 
         var orderProperties = applicationContext.getBean(OrderProperties.class);
-//        System.out.println("test -- "+orderProperties.getVersion());
+        logger.info("logger name => {}",logger.getName());
+        logger.info("version : {}",orderProperties.getVersion());
+        logger.info("minimumOrderAmount : {}",orderProperties.getMinimumOrderAmount());
+        logger.info("SupportVendors : {}",orderProperties.getSupportVendors());
+        logger.info("Description : {}",orderProperties.getDescription());
 
-        var resource = applicationContext.getResource("application.yaml"); //working directory 기준, classpath 가 기본값
-        var resource2 = applicationContext.getResource("file:test/sample.txt"); //
-        var resource3 = applicationContext.getResource("https://stackoverflow.com/");
-
-        System.out.println(resource.getClass().getCanonicalName());
-
-        var file = resource2.getFile();
-        var strings = Files.readAllLines(file.toPath());
-        System.out.println(strings.stream().reduce("",(a,b)->a+"\n"+b));
-
-        var readableByChannel = Channels.newChannel(resource3.getURL().openStream());
-        var bufferedReader = new BufferedReader(Channels.newReader(readableByChannel, StandardCharsets.UTF_8));
-        var contents = bufferedReader.lines().collect(Collectors.joining("\n"));
-        System.out.println(contents);
 
         var customId = UUID.randomUUID();
         var voucherRepository = applicationContext.getBean(VoucherRepository.class);
