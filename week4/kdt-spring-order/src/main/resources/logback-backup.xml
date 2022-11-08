@@ -1,0 +1,41 @@
+<configuration>
+
+    <conversionRule conversionWord="clr"
+                    converterClass="org.springframework.boot.logging.logback.ColorConverter"/>
+
+    <property name="CONSOLE_LOG_PATTERN" value="%clr(%d{HH:mm:ss.SSS}){yellow} [%thread] %clr(%-5level) %logger{36} - %msg%n" />
+    <property name="FILE_LOG_PATTERN" value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+
+    <timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"></timestamp>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+<!--    <appender name="FILE" class="ch.qos.logback.core.FileAppender" >-->
+<!--        <file>logs/kdt_${bySecond}.log</file>-->
+<!--        <append>false</append>-->
+<!--        <encoder>-->
+<!--            <pattern>${LOG_PATTERN}</pattern>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+    <appender name="ROLLING_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender" >
+<!--        <file>logs/access.log</file> &lt;!&ndash; access.log가 만들어지고 날짜가 변하면 파일명이 access-%d{yyyy-MM-dd}.log로 변경되는 패턴 : 최신 파일은 언제나 access.log&ndash;&gt;-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/access-%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.prgrms.kdt" level="debug">
+        <appender-ref ref="ROLLING_FILE"/>
+    </logger>
+
+    <root level="warn"> <!--root는 모든 레벨-->
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

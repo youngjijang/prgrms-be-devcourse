@@ -36,3 +36,8 @@ database
 
 - kdt-spring-order-ver5
   : logging
+
+### Week 04
+- kdt-spring-order
+  : test 코드 작성
+
