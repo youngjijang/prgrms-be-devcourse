@@ -3,6 +3,7 @@
 프로그래머스 데브코스 실습 코드
 
 ### Week 01
+java 
 
 - Interface
   : interface 실습
@@ -18,6 +19,7 @@
 database
 
 ### Week 03
+SpringBoot Part 1  - Spring 기초
 
 - kdt-spring-order
   : 기본코드
@@ -38,7 +40,12 @@ database
   : logging
 
 ### Week 04
+SpringBoot Part2 - DateBase 연동
 
 - kdt-spring-order
-  : test 코드 작성
+  : test 코드 실습
+  : JDBC 연결
+
+### Week 05
+SpringBoot Part3 - Web
 
