@@ -44,7 +44,10 @@ SpringBoot Part2 - DateBase 연동
 
 - kdt-spring-order
   : test 코드 실습
-  : JDBC 연결
+  : JDBC , template
+  : enbadded database
+  : jdk proxy
+  
 
 ### Week 05
 SpringBoot Part3 - Web
