@@ -9,10 +9,13 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
 import java.time.LocalDateTime;
@@ -30,23 +33,16 @@ import static org.hamcrest.Matchers.*;
 @SpringJUnitConfig
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // PER_CLASS : class 마다 인스턴스가 하나
-class CustomerJdbcRepositoryTest {
+class CustomerNamedJdbcRepositoryTest {
 
     @Configuration
-    @ComponentScan
+    @ComponentScan(
+            basePackages = {"org.prgrms.kdt.customer"}
+    )
     static class Config {
 
         @Bean
         public DataSource dataSource() {
-//            EmbeddedDatabase db = new EmbeddedDatabaseBuilder()
-//                .generateUniqueName(true)
-//                .setType(H2)
-//                .setScriptEncoding("UTF-8")
-//                .ignoreFailedDrops(true)
-//                .addScript("schema.sql") // 테이블을 만들기 위한 스크립트 추가
-//                .build();
-//
-//            return db;
 
             HikariDataSource dataSource = DataSourceBuilder.create()
                     .url("jdbc:mysql://localhost:2215/test-order_mgmt")
@@ -54,18 +50,23 @@ class CustomerJdbcRepositoryTest {
                     .password("test1234!")
                     .type(HikariDataSource.class) // datasource 만들 구현체 타입 지정
                     .build();
-            // connection pool은 기본적으로 10개의 connection을 만든다.
-            // 100개로 늘리고 싶다면
-            //dataSource.setMaximumPoolSize(1000);
-            //dataSource.setMinimumIdle(100);
             return dataSource;
         }
 
         @Bean
-        public JdbcTemplate jdbcTemplate(DataSource dataSource) {
-            return new JdbcTemplate(dataSource);
+        public NamedParameterJdbcTemplate jdbcTemplate(DataSource dataSource) {
+            return new NamedParameterJdbcTemplate(dataSource);
         }
 
+        @Bean
+        public PlatformTransactionManager platformTransactionManager(DataSource dataSource){
+            return new DataSourceTransactionManager(dataSource);
+        }
+
+        @Bean
+        public TransactionTemplate transactionTemplate(PlatformTransactionManager platformTransactionManager){
+            return new TransactionTemplate(platformTransactionManager);
+        }
     }
 
     @Autowired
@@ -166,5 +167,26 @@ class CustomerJdbcRepositoryTest {
         assertThat(retrievedCustomer.get(), samePropertyValuesAs(newCustomers));
     }
 
+    @Test
+    @Order(7)
+    @DisplayName("트랜젝션 테스트.")
+    public void testTransaction() {
+//        var prevOne = customerJdbcRepository.findById(newCustomers.getCustomerId());
+//        assertThat(prevOne.isEmpty(), is(false));
+//
+//        var newOne = customerJdbcRepository.insert(new Customer(UUID.randomUUID(),"a","a@gmail.com",LocalDateTime.now()));
+//        try {
+//            customerJdbcRepository.testTransaction(
+//                    new Customer(newOne.getCustomerId(),
+//                            "b",
+//                            prevOne.get().getEmail(),
+//                            newOne.getCreatedAt()));
+//        }catch (DataAccessException e){
+//            // got error when testing transaction
+//        }
+//        var maybeNewOne = customerJdbcRepository.findById(newOne.getCustomerId());
+//        assertThat(maybeNewOne.isEmpty(),is(false));
+//        assertThat(maybeNewOne.get(),samePropertyValuesAs(newOne));
 
+    }
 }
