@@ -3,49 +3,52 @@
 프로그래머스 데브코스 실습 코드
 
 ### Week 01
-java 
+java <br>
 
-- Interface
-  : interface 실습
+- Interface<br>
+  : interface 실습<br>
 
-- Collection
-  : colelction 실습
+- Collection<br>
+  : colelction 실습<br>
 
-- BaseBall
-  : 숫자야구 게임 OOP 구현
+- BaseBall<br>
+  : 숫자야구 게임 OOP 구현<br>
 
 ### Week 02
 
-database
+database<br>
 
 ### Week 03
-SpringBoot Part 1  - Spring 기초
+SpringBoot Part 1  - Spring 기초<br>
 
-- kdt-spring-order
-  : 기본코드
+- kdt-spring-order<br>
+  : 기본코드<br>
 
-- kdt-spring-order-ver2
-  : IoC 구현 , IoC 컨테이너 생성
+- kdt-spring-order-ver2<br>
+  : IoC 구현 , IoC 컨테이너 생성<br>
 
-- kdt-spring-order-ver3
-  : Stereo type 추가, 컴포넌트 스캔 실습
-  : 패키지 분류
-  : lifecycle callback 추가
+- kdt-spring-order-ver3<br>
+  : Stereo type 추가, 컴포넌트 스캔 실습 <br>
+  : 패키지 분류<br>
+  : lifecycle callback 추가<br>
 
-- kdt-spring-order-ver4
-  : 환경 변수 추가
-  : resource
+- kdt-spring-order-ver4<br>
+  : 환경 변수 추가<br>
+  : resource<br>
 
-- kdt-spring-order-ver5
-  : logging
+- kdt-spring-order-ver5<br>
+  : logging<br>
 
 ### Week 04
-SpringBoot Part2 - DateBase 연동
+SpringBoot Part2 - DateBase 연동<br>
 
-- kdt-spring-order
-  : test 코드 실습
-  : JDBC 연결
+- kdt-spring-order<br>
+  : test 코드 실습<br>
+  : JDBC , template<br>
+  : enbadded database<br>
+  : jdk proxy<br>
+  
 
 ### Week 05
-SpringBoot Part3 - Web
+SpringBoot Part3 - Web<br>
 
