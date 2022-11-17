@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class VersionProvider {
     private final String version;
 
+
     public VersionProvider(@Value("${version:v0.0.0}") String version) {
         this.version = version;
         System.out.println(version);

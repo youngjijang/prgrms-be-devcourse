@@ -1,0 +1,29 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+<h1>Hello</h1>
+<p th:text="'the time on the server is '+${serverTime}">
+    ------
+</p>
+
+<img th:src="@{/resources/bg.png}">
+<table border="1">
+    <tr th:each="customer: ${customers}" th:object="${customer}" >
+        <td th:text="${customer.customerId}"></td>
+        <td th:text="*{name}"></td>
+        <td th:text="*{email}"></td>
+        <td th:text="*{createAt}"></td>
+        <td th:text="*{lastLoginAt}"></td>
+    </tr>
+</table>
+
+</body>
+</html>

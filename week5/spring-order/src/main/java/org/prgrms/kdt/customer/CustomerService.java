@@ -1,9 +1,12 @@
 package org.prgrms.kdt.customer;
 
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
-public interface CustomerService {
 
+public interface CustomerService {
     void createCustomers(List<Customer> customers);
+
     List<Customer> getAllCustomers();
 }
