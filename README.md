@@ -52,3 +52,8 @@ SpringBoot Part2 - DateBase 연동<br>
 ### Week 05
 SpringBoot Part3 - Web<br>
 
+- kdt-spring-order<br>
+  : jsp<br>
+
+- spring-order<br>
+  : Thymeleaf<br>
