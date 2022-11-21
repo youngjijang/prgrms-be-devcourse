@@ -12,10 +12,12 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.sql.DataSource;
@@ -33,7 +35,6 @@ import static org.hamcrest.Matchers.*;
 
 
 @SpringJUnitConfig
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // PER_CLASS : class 마다 인스턴스가 하나
 class CustomerServiceTransactionTest {
 
@@ -41,6 +42,7 @@ class CustomerServiceTransactionTest {
     @ComponentScan(
             basePackages = {"org.prgrms.kdt.customer"}
     )
+    @EnableTransactionManagement
     static class Config {
 
         @Bean
@@ -99,7 +101,7 @@ class CustomerServiceTransactionTest {
 
     @AfterEach
     void dataCleanup(){
-
+        customerJdbcRepository.deleteAll();
     }
 
     @AfterAll
@@ -127,13 +129,18 @@ class CustomerServiceTransactionTest {
     void multiInsertRollbackTest(){
         var customers = List.of(
                 new Customer(UUID.randomUUID(), "a", "a@a.com", LocalDateTime.now()),
-                new Customer(UUID.randomUUID(), "b", "b@b.com", LocalDateTime.now())
+                new Customer(UUID.randomUUID(), "b", "a@a.com", LocalDateTime.now())
         );
 
-        customerService.createCustomers(customers);
+        try {
+            customerService.createCustomers(customers);
+        }catch (DataAccessException e){
+
+        }
+
         var allCustomers = customerJdbcRepository.findAll();
-        assertThat(allCustomers.size(),is(2));
-        assertThat(allCustomers, containsInAnyOrder(samePropertyValuesAs(customers.get(0)),samePropertyValuesAs(customers.get(1))));
+        assertThat(allCustomers.isEmpty(),is(true));
+        assertThat(allCustomers, not( containsInAnyOrder(samePropertyValuesAs(customers.get(0)),samePropertyValuesAs(customers.get(1)))));
     }
 
 }

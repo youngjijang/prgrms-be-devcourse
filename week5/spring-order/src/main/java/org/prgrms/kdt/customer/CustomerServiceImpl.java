@@ -1,6 +1,8 @@
 package org.prgrms.kdt.customer;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
@@ -18,7 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    @Transactional
+    @Transactional(isolation = Isolation.DEFAULT) // 사용하는 DBMS의 default값을 사용하겠다.
     public void createCustomers(List<Customer> customers) {
         customers.forEach(customerRepository::insert);
     }
