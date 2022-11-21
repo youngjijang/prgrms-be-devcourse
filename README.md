@@ -57,3 +57,6 @@ SpringBoot Part3 - Web<br>
 
 - spring-order<br>
   : Thymeleaf<br>
+
+- spring-order-ver2<br>
+  : REST API<br>

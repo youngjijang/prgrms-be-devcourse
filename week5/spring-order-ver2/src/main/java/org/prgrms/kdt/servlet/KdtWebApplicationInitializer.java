@@ -1,5 +1,7 @@
 package org.prgrms.kdt.servlet;
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.zaxxer.hikari.HikariDataSource;
 import org.prgrms.kdt.customer.CustomerController;
 import org.slf4j.Logger;
@@ -9,8 +11,13 @@ import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.*;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.xml.MarshallingHttpMessageConverter;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.oxm.xstream.XStreamMarshaller;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -30,6 +37,9 @@ import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.servlet.ServletContext;
 import javax.sql.DataSource;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 public class KdtWebApplicationInitializer implements WebApplicationInitializer {
 
@@ -74,6 +84,24 @@ public class KdtWebApplicationInitializer implements WebApplicationInitializer {
         @Override
         public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
             this.applicationContext = applicationContext;
+        }
+
+        @Override
+        public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+
+            // xml messageConverter
+            var messageConverter = new MarshallingHttpMessageConverter();
+            var xStreamMarshaller = new XStreamMarshaller();
+            messageConverter.setMarshaller(xStreamMarshaller);
+            messageConverter.setUnmarshaller(xStreamMarshaller);
+            converters.add(0,messageConverter);
+
+            // json 모듈 추가 : LocalTime 보기위해 추가
+            var javaTimeModule = new JavaTimeModule();
+            javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ISO_DATE));
+            //java object를 json으로 만들때 많이 쓰는 mapper Jackson2ObjectMapperBuilder
+            var module = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
+            converters.add(1, new MappingJackson2HttpMessageConverter(module.build()));
         }
     }
 
