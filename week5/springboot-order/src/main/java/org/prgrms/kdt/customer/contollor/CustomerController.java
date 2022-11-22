@@ -1,6 +1,7 @@
-package org.prgrms.kdt.customer;
+package org.prgrms.kdt.customer.contollor;
 
-import org.prgrms.kdt.servlet.KdtWebApplicationInitializer;
+import org.prgrms.kdt.customer.service.CustomerService;
+import org.prgrms.kdt.customer.model.Customer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;

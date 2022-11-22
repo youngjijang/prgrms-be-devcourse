@@ -25,10 +25,7 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.resource.EncodedResourceResolver;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
@@ -102,6 +99,13 @@ public class KdtWebApplicationInitializer implements WebApplicationInitializer {
             //java object를 json으로 만들때 많이 쓰는 mapper Jackson2ObjectMapperBuilder
             var module = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
             converters.add(1, new MappingJackson2HttpMessageConverter(module.build()));
+        }
+
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/api/**")
+                    .allowedMethods("GET","POST")
+                    .allowedOrigins("*");
         }
     }
 

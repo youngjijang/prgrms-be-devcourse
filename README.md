@@ -3,6 +3,7 @@
 프로그래머스 데브코스 실습 코드
 
 ### Week 01
+
 java <br>
 
 - Interface<br>
@@ -19,7 +20,8 @@ java <br>
 database<br>
 
 ### Week 03
-SpringBoot Part 1  - Spring 기초<br>
+
+SpringBoot Part 1 - Spring 기초<br>
 
 - kdt-spring-order<br>
   : 기본코드<br>
@@ -40,6 +42,7 @@ SpringBoot Part 1  - Spring 기초<br>
   : logging<br>
 
 ### Week 04
+
 SpringBoot Part2 - DateBase 연동<br>
 
 - kdt-spring-order<br>
@@ -47,9 +50,9 @@ SpringBoot Part2 - DateBase 연동<br>
   : JDBC , template<br>
   : enbadded database<br>
   : jdk proxy<br>
-  
 
 ### Week 05
+
 SpringBoot Part3 - Web<br>
 
 - kdt-spring-order<br>
@@ -60,3 +63,11 @@ SpringBoot Part3 - Web<br>
 
 - spring-order-ver2<br>
   : REST API<br>
+  : SPA<br>
+
+- kdt-order-ui
+  : 실습용 React 코드
+
+- springboot-order<br>
+  : springboot web application
+  ( AutoConfiguration )

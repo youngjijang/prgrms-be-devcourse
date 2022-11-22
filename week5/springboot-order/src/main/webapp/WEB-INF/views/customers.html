@@ -1,0 +1,43 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <title>Home</title>
+</head>
+
+<body>
+<h1>Hello</h1>
+<p th:text="'the time on the server is '+${serverTime}">
+    ------
+</p>
+<br>
+<img th:src="@{/resources/bg.png}">
+<table border="1">
+    <thead>
+    <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Email</th>
+<!--        <th scope="col">CreatedAt</th>-->
+<!--        <th scope="col">LastLoginAt</th>-->
+    </tr>
+    </thead>
+    <thead>
+    <tr th:each="customer: ${customers}" th:object="${customer}" >
+        <td th:text="${customer.customerId}"></td>
+        <td th:text="*{name}"></td>
+        <td th:text="*{email}"></td>
+<!--        <td th:text="*{createAt}"></td>-->
+<!--        <td th:text="*{lastLoginAt}"></td>-->
+    </tr>
+    </thead>
+</table>
+<br>
+<a class="btn btn-primary" th:href="@{/customers/new}" role="button">New</a>
+
+</body>
+</html>
