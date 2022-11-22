@@ -65,7 +65,7 @@ SpringBoot Part3 - Web<br>
   : REST API<br>
   : SPA<br>
 
-- kdt-order-ui
+- kdt-order-ui<br>
   : 실습용 React 코드
 
 - springboot-order<br>
