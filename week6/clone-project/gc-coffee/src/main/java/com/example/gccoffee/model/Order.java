@@ -45,8 +45,8 @@ public class Order {
         return orderId;
     }
 
-    public String getEmail() {
-        return email.getAddress();
+    public Email getEmail() {
+        return email;
     }
 
     public String getAddress() {
