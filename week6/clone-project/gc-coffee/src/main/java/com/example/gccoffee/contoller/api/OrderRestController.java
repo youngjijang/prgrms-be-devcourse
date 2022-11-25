@@ -1,5 +1,6 @@
-package com.example.gccoffee.contoller;
+package com.example.gccoffee.contoller.api;
 
+import com.example.gccoffee.contoller.CreateOrderRequest;
 import com.example.gccoffee.model.Email;
 import com.example.gccoffee.model.Order;
 import com.example.gccoffee.service.OrderService;
