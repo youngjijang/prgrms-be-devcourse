@@ -71,3 +71,13 @@ SpringBoot Part3 - Web<br>
 - springboot-order<br>
   : springboot web application
   ( AutoConfiguration )
+
+### Week 06
+  
+Clone project : 클론 코딩 - 커피빈 주문 관리 서비스<br>
+
+- gc-coffee<br>
+  : 서버<br>
+
+- order-ui<br>
+  : 클라이언트<br>
