@@ -1,0 +1,19 @@
+Spring :
+  datasource:
+    hikari:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:~/test
+      username: sa
+      password:
+  jpa:
+    generate-ddl: true  #ddl option
+    open-in-view: false
+    show-sql: true    #sql 쿼리 확인
+
+mybatis:
+  type-aliases-package: com.kdt.lecture.repository.domain  # 쿼리 결과(resultSet)를 어떤 package에 mapping 할지
+  configuration:
+    map-underscore-to-camel-case: true # 언더바 형태 필드를 -> 카멜케이스 형태로 매칭
+    default-fetch-size: 100 # 한번에 몇개씩 가져 올것인가.
+    default-statement-timeout: 30  # statement 객체가 통신하는 time limit
+  mapper-locations: classpath:mapper/*.xml # 쿼리를 관리하는 위치
