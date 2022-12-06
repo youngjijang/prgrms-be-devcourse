@@ -2,7 +2,7 @@
 
 프로그래머스 데브코스 실습 코드
 
-### Week 01
+## Week 01
 
 java <br>
 
@@ -15,11 +15,11 @@ java <br>
 - BaseBall<br>
   : 숫자야구 게임 OOP 구현<br>
 
-### Week 02
+## Week 02
 
 database<br>
 
-### Week 03
+## Week 03
 
 SpringBoot Part 1 - Spring 기초<br>
 
@@ -41,7 +41,7 @@ SpringBoot Part 1 - Spring 기초<br>
 - kdt-spring-order-ver5<br>
   : logging<br>
 
-### Week 04
+## Week 04
 
 SpringBoot Part2 - DateBase 연동<br>
 
@@ -51,7 +51,7 @@ SpringBoot Part2 - DateBase 연동<br>
   : enbadded database<br>
   : jdk proxy<br>
 
-### Week 05
+## Week 05
 
 SpringBoot Part3 - Web<br>
 
@@ -72,8 +72,8 @@ SpringBoot Part3 - Web<br>
   : springboot web application
   ( AutoConfiguration )
 
-### Week 06
-  
+## Week 06
+
 Clone project : 클론 코딩 - 커피빈 주문 관리 서비스<br>
 
 - gc-coffee<br>
@@ -81,3 +81,15 @@ Clone project : 클론 코딩 - 커피빈 주문 관리 서비스<br>
 
 - order-ui<br>
   : 클라이언트<br>
+
+## Week 07
+
+SpringBoot Part4 - JPA<br>
+
+- kdt-jpa
+  : jdbc, jdbc template
+  : MyBatis
+  : JPA
+
+- kdt-jpa-practice
+  : JPA 실습
