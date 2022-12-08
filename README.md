@@ -93,3 +93,6 @@ SpringBoot Part4 - JPA<br>
 
 - kdt-jpa-practice
   : JPA 실습
+
+- kdt-springDataJpa
+  : Spring JPA 
