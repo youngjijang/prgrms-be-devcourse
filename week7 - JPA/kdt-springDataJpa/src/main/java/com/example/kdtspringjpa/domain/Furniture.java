@@ -1,4 +1,4 @@
-package com.example.kdtjpapractice.domain;
+package com.example.kdtspringjpa.domain;
 
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;

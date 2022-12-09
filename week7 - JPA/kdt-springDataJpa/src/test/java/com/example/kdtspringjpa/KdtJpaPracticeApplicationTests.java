@@ -1,4 +1,4 @@
-package com.example.kdtjpapractice;
+package com.example.kdtspringjpa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
