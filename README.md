@@ -86,13 +86,18 @@ Clone project : 클론 코딩 - 커피빈 주문 관리 서비스<br>
 
 SpringBoot Part4 - JPA<br>
 
-- kdt-jpa
-  : jdbc, jdbc template
-  : MyBatis
-  : JPA
+- kdt-jpa<br>
+  : jdbc, jdbc template<br>
+  : MyBatis<br>
+  : JPA<br>
 
+<<<<<<< HEAD
 - kdt-jpa-practice
   : JPA 실습
 
 - kdt-springDataJpa
   : Spring JPA 
+=======
+- kdt-jpa-practice<br>
+  : JPA 실습<br>
+>>>>>>> 1f1585163e0d152e5b63edf24e8791d0440f3c79
