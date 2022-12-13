@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLException;
+
 @Slf4j
 @SpringBootTest
 public class JPATest {
@@ -44,7 +46,7 @@ public class JPATest {
     }
 
     @Test
-    @Transactional // 영속석 컨텍스트 안에서 관리를 하겠다.
+   // @Transactional // 영속석 컨텍스트 안에서 관리를 하겠다.
     void UPDATE_TEST(){
         //Given
         CustomerEntity customer = new CustomerEntity();
