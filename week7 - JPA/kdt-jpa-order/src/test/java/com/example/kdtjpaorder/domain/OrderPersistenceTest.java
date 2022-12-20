@@ -2,6 +2,7 @@ package com.example.kdtjpaorder.domain;
 
 import com.example.kdtjpaorder.domain.order.Member;
 import com.example.kdtjpaorder.domain.order.Order;
+import com.example.kdtjpaorder.domain.order.OrderItem;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
@@ -78,6 +79,12 @@ public class OrderPersistenceTest {
         order.setOrderStatus(OPENED);
         order.setMemo("부재시 전화주세요.");
         order.setMember(member); // 외래키를 직접 지정
+
+
+        OrderItem orderItem = new OrderItem();
+        orderItem.setOrder(order);
+        orderItem.setPrice(5000);
+        orderItem.setQuantity(7);
 
         entityManager.persist(order);
 

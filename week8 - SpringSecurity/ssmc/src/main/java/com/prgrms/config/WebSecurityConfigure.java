@@ -1,22 +1,33 @@
 package com.prgrms.config;
 
 import org.slf4j.Logger;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDecisionManager;
+import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.expression.SecurityExpressionHandler;
+import org.springframework.security.access.vote.UnanimousBased;
+import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -28,12 +39,29 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
     auth.inMemoryAuthentication()
             .withUser("user").password("{noop}user123").roles("USER")
             .and()
-            .withUser("admin").password("{noop}admin123").roles("ADMIN");
+            .withUser("admin01").password("{noop}admin123").roles("ADMIN")
+            .and()
+            .withUser("admin02").password("{noop}admin123").roles("ADMIN");
   }
 
   @Override
   public void configure(WebSecurity web) {
     web.ignoring().antMatchers("/assets/**");
+  }
+
+
+//  public SecurityExpressionHandler<FilterInvocation> securityExpressionHandler(){
+//    return new CustomWebSecurityExpressionHandler(
+//            new AuthenticationTrustResolverImpl(),"ROLE_"
+//    );
+//  }
+
+  @Bean
+  public AccessDecisionManager accessDecisionManager(){
+    List<AccessDecisionVoter<?>> voters = new ArrayList<>();
+    voters.add(new WebExpressionVoter());
+    voters.add(new OddAdminVoter(new AntPathRequestMatcher("/admin")));
+    return new UnanimousBased(voters);
   }
 
   @Override
@@ -43,6 +71,8 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
             .antMatchers("/me").hasAnyRole("USER", "ADMIN")
             .antMatchers("/admin").access("hasRole('ADMIN') and isFullyAuthenticated()") // isFullyAuthenticated -> remember me에서 인증ㅇ된 사용자는 안된다.
             .anyRequest().permitAll()
+            .accessDecisionManager(accessDecisionManager())
+            //.expressionHandler(securityExpressionHandler())
             .and()
           .formLogin()
             .defaultSuccessUrl("/")
@@ -78,6 +108,20 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
             .principal("thisIsAnonymousUser")
             .authorities("ROLE_ANONYMOUS", "ROLE_UNKNOWN")
             .and()
+            /**
+             * 세션 옵션 설정
+             */
+          .sessionManagement()
+            .sessionFixation().changeSessionId() // 세션 옵션 설정
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 생성전략 사용
+            .invalidSessionUrl("/") // 유효하지 않은 세션이 감지되었을때 리다이렉팅 위치
+            .maximumSessions(1) // 최대로 동시 로그인 가능한 개수
+              .maxSessionsPreventsLogin(false)
+              .and()
+            .and()
+            /**
+             * 예외처리 핸들러
+             */
           .exceptionHandling()
             .accessDeniedHandler(accessDeniedHandler())
 
