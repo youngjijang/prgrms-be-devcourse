@@ -1,0 +1,23 @@
+<!doctype html>
+<html  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title th:text="#{html.title}"></title>
+</head>
+<body>
+<h1>내 정보</h1>
+<span sec:authentication="name">
+    The value of the "name" property of the authentication object should appear here.
+</span>님 반갑습니다.
+
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    권한 : admin
+</div>
+<div sec:authorize="hasRole('ROLE_USER')">
+    권한 : user
+</div>
+</body>
+</html>
