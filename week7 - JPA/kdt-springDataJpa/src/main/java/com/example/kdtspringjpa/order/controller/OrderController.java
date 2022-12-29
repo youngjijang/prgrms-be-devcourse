@@ -20,7 +20,7 @@ public class OrderController {
     }
 
     @ExceptionHandler(Exception.class)
-    public ApiResponse<String> internalServerErrorHandler(NotFoundException e) {
+    public ApiResponse<String> internalServerErrorHandler(Exception e) {
         return ApiResponse.fail(500, e.getMessage());
     }
 
