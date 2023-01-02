@@ -1,6 +1,7 @@
 package com.prgrms.config;
 
 import com.prgrms.User.UserService;
+import com.prgrms.jwt.Jwt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,12 +27,17 @@ import java.io.IOException;
 @EnableWebSecurity
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
-
+    private JwtConfiguration jwtConfiguration;
     private UserService userService;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    public void setJwtConfiguration(JwtConfiguration jwtConfiguration) {
+        this.jwtConfiguration = jwtConfiguration;
     }
 
     @Override
@@ -44,6 +50,14 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userService);
     }
 
+    @Bean
+    public Jwt jwt(){
+        return new Jwt(
+           jwtConfiguration.getIssuer(),
+           jwtConfiguration.getClientSecret(),
+           jwtConfiguration.getExpirySeconds()
+        );
+    }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -93,6 +107,7 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
             }
         };
     }
+
 
 
 }
