@@ -1,5 +1,7 @@
 package com.prgrms.User;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import javax.persistence.*;
 
 @Entity
@@ -20,6 +22,11 @@ public class User {
     @JoinColumn(name = "group_id")
     private Group group;
 
+    public void checkPassword(PasswordEncoder passwordEncoder, String credential){
+        if(!passwordEncoder.matches(credential,passwd)){
+            throw new IllegalArgumentException("Bad credential");
+        }
+    }
     public Long getId() {
         return id;
     }

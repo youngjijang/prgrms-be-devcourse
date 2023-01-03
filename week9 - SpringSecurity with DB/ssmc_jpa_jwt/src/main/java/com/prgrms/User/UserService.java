@@ -1,32 +1,36 @@
 package com.prgrms.User;
 
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
-public class UserService implements UserDetailsService {
+public class UserService {
+
+    private final PasswordEncoder passwordEncoder;
+
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(PasswordEncoder passwordEncoder, UserRepository userRepository) {
+        this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
     }
 
-    @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        return userRepository.findByLoginId(userName)
-                .map(user ->
-                        // 찾은 user 객체를 UserDetails 타입으로 반환해준다.
-                        User.builder()
-                                .username(user.getLoginId())
-                                .password(user.getPasswd())
-                                .authorities(user.getGroup().getAuthorities())
-                                .build()
-                )
-                .orElseThrow(() -> new UsernameNotFoundException("Could not found user for" + userName));
+    public User login(String username, String credentials){
+        User user = userRepository.findByLoginId(username)
+                .orElseThrow(()-> new UsernameNotFoundException("Could not found user for "+ username));
+        user.checkPassword(passwordEncoder, credentials);
+        return user;
     }
+
+    @Transactional(readOnly = true)
+    public Optional<User> findByLoginId(String loginId) {
+        if(loginId.isEmpty()) throw new RuntimeException("loginId must be provided.");
+        return  userRepository.findByLoginId(loginId);
+    }
+
 }

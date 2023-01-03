@@ -3,6 +3,9 @@ package com.prgrms.config;
 import net.sf.log4jdbc.Log4jdbcProxyDataSource;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
@@ -17,6 +20,13 @@ public class DataSourcePostProcessor implements BeanPostProcessor {
             return new Log4jdbcProxyDataSource((DataSource) bean);
         }
         return bean;
+    }
+
+
+    // 순환참조로 인한 임시방편이동,,, 다른 곳으로 빼줘야한다.ㅜ
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }

@@ -3,10 +3,13 @@ package com.prgrms.config;
 import com.prgrms.User.UserService;
 import com.prgrms.jwt.Jwt;
 import com.prgrms.jwt.JwtAuthenticationFilter;
+import com.prgrms.jwt.JwtAuthenticationProvider;
+import com.prgrms.jwt.JwtSecurityContextRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -15,10 +18,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.context.SecurityContextRepository;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -29,16 +31,9 @@ import java.io.IOException;
 @EnableWebSecurity
 public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
 
-    private JwtConfiguration jwtConfiguration;
-    private UserService userService;
+    private final JwtConfiguration jwtConfiguration;
 
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setJwtConfiguration(JwtConfiguration jwtConfiguration) {
+    public WebSecurityConfigure(JwtConfiguration jwtConfiguration) {
         this.jwtConfiguration = jwtConfiguration;
     }
 
@@ -47,10 +42,6 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/assets/**", "/h2-console/**");
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService);
-    }
 
     @Bean
     public Jwt jwt(){
@@ -61,15 +52,34 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         );
     }
 
+    @Bean
+    public JwtAuthenticationProvider jwtAuthenticationProvider(Jwt jwt, UserService userService){
+        return new JwtAuthenticationProvider(jwt,userService);
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception { //AuthenticationManager bean으로 등록
+        return super.authenticationManagerBean();
+    }
+
+    @Autowired
+    public void configureAuthentication(AuthenticationManagerBuilder builder, JwtAuthenticationProvider provider){
+        builder.authenticationProvider(provider); // AuthenticationManager에 구현한 provider을 추가해준다.
+    }
+
+
+
     private JwtAuthenticationFilter jwtAuthenticationFilter() {// JwtAuthenticationFilter를 생성하는 메소드
         Jwt jwt = getApplicationContext().getBean(Jwt.class);
         return new JwtAuthenticationFilter(jwtConfiguration.getHeader(),jwt);
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public SecurityContextRepository securityContextRepository(){
+        Jwt jwt = getApplicationContext().getBean(Jwt.class);
+        return new JwtSecurityContextRepository(jwtConfiguration.getHeader(), jwt);
     }
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -96,6 +106,9 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                  */
             .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
+                .and()
+            .securityContext()
+                .securityContextRepository(securityContextRepository())
                 .and()
             .addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
             //SecurityContextPersistenceFilter 다음 필터에 jwtAuthenticationFilter 추가

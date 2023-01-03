@@ -22,6 +22,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.apache.logging.log4j.util.Strings.isNotEmpty;
+
 public class JwtAuthenticationFilter extends GenericFilterBean {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -51,7 +53,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 
         if (SecurityContextHolder.getContext().getAuthentication() == null) { // 참조가 들어있다면 아무 처리도 하지않는다.
             String token = getToken(request);
-            if (token != null) {
+            if (isNotEmpty(token)) {
                 try {
                     Jwt.Claims claims = verify(token);
                     log.debug("Jwt parse result : {}", claims);
@@ -60,8 +62,10 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                     List<GrantedAuthority> authorities = getAuthorities(claims);
 
                     if (username != null && !username.isEmpty() && authorities.size() > 0) {
-                        UsernamePasswordAuthenticationToken authentication
-                                = new UsernamePasswordAuthenticationToken(username, null, authorities);
+//                        UsernamePasswordAuthenticationToken authentication
+//                                = new UsernamePasswordAuthenticationToken(username, null, authorities);
+                        JwtAuthenticationToken authentication
+                                = new JwtAuthenticationToken(new JwtAuthentication(token,username), null, authorities);
                         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); // optional
                         SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
