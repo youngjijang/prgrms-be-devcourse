@@ -2,6 +2,7 @@ package com.prgrms.config;
 
 import com.prgrms.User.UserService;
 import com.prgrms.jwt.Jwt;
+import com.prgrms.jwt.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -59,6 +61,11 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         );
     }
 
+    private JwtAuthenticationFilter jwtAuthenticationFilter() {// JwtAuthenticationFilter를 생성하는 메소드
+        Jwt jwt = getApplicationContext().getBean(Jwt.class);
+        return new JwtAuthenticationFilter(jwtConfiguration.getHeader(),jwt);
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -89,6 +96,9 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                  */
             .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler())
+                .and()
+            .addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
+            //SecurityContextPersistenceFilter 다음 필터에 jwtAuthenticationFilter 추가
 
         ;
     }
