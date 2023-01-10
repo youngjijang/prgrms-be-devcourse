@@ -91,13 +91,9 @@ SpringBoot Part4 - JPA<br>
   : MyBatis<br>
   : JPA<br>
 
-<<<<<<< HEAD
-- kdt-jpa-practice
-  : JPA 실습
-
-- kdt-springDataJpa
-  : Spring JPA 
-=======
 - kdt-jpa-practice<br>
   : JPA 실습<br>
->>>>>>> 1f1585163e0d152e5b63edf24e8791d0440f3c79
+  
+## Week 08
+
+SpringBoot Part5 - Spring Security<br>
