@@ -3,9 +3,11 @@ package com.prgrms.config;
 import com.prgrms.User.UserService;
 import com.prgrms.jwt.Jwt;
 import com.prgrms.jwt.JwtAuthenticationFilter;
+import com.prgrms.oauth2.HttpCookieOAuth2AuthorizationRequestRepository;
 import com.prgrms.oauth2.OAuth2AuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -14,6 +16,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.client.JdbcOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.AuthenticatedPrincipalOAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
@@ -50,6 +59,22 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
         );
     }
 
+
+    @Bean
+    public AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository(){
+        return new HttpCookieOAuth2AuthorizationRequestRepository();
+    }
+
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService(JdbcOperations jdbcOperations, ClientRegistrationRepository clientRegistrationRepository){
+        return new JdbcOAuth2AuthorizedClientService(jdbcOperations, clientRegistrationRepository);
+        // 기본적으로 spring 프레임워크에 내부적으로 등록되는 bean들이여서 주입을 받아 별다른 처리없이 파라미터로 전달한다.
+    }
+
+    @Bean
+    public OAuth2AuthorizedClientRepository authorizedClientRepository(OAuth2AuthorizedClientService oAuth2AuthorizedClientService){
+        return new AuthenticatedPrincipalOAuth2AuthorizedClientRepository(oAuth2AuthorizedClientService); // 기본적으로 사용되는 구현체.. 그대로 사용한다.
+    }
 
     @Bean
     public OAuth2AuthenticationSuccessHandler oauth2AuthenticationSuccessHandler(Jwt jwt, UserService userService) {
@@ -90,6 +115,10 @@ public class WebSecurityConfigure extends WebSecurityConfigurerAdapter {
                 .accessDeniedHandler(accessDeniedHandler())
                 .and()
                 .oauth2Login()
+                .authorizationEndpoint()
+                .authorizationRequestRepository(authorizationRequestRepository())
+                .and()
+                .authorizedClientRepository(getApplicationContext().getBean(AuthenticatedPrincipalOAuth2AuthorizedClientRepository.class)) // 파라미터 때문에 메소드를 직접 호출하는게 힘드니까 getBean으로 등
                 .successHandler(getApplicationContext().getBean(OAuth2AuthenticationSuccessHandler.class))
                 .and()
                 .addFilterAfter(jwtAuthenticationFilter(), SecurityContextPersistenceFilter.class)
